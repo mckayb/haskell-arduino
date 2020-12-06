@@ -1,4 +1,4 @@
-name:                haskell-arduino-project03
+name:                haskell-arduino-p03-love-o-meter
 version:             0.1.0.0
 github:              "githubuser/haskell-arduino"
 license:             BSD3
@@ -37,7 +37,7 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - haskell-arduino-project03
+    - haskell-arduino-p03-love-o-meter
 
 tests:
   haskell-arduino-test:
@@ -48,4 +48,4 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - haskell-arduino-project03
+    - haskell-arduino-p03-love-o-meter
