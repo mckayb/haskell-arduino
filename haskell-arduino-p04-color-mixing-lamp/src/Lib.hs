@@ -53,7 +53,7 @@ someFunc = arduino $ do
     greenLedPin =: pwm' newGreenValue
     blueLedPin =: pwm' newBlueValue
 
-pwm' :: Behavior Float -> TypedBehavior 'PWM Float
+pwm' :: Behavior a -> TypedBehavior 'PWM a
 pwm' = TypedBehavior
 
 instance (Typed a, IsPWMPin t) => Output (Pin t) (Event 'PWM (Stream a)) where
