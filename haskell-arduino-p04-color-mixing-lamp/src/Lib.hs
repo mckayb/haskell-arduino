@@ -53,6 +53,7 @@ someFunc = arduino $ do
     greenLedPin =: pwm' newGreenValue
     blueLedPin =: pwm' newBlueValue
 
+-- The library only defines pwm for Word8, so we did some hacking here to allow floats.
 pwm' :: Behavior a -> TypedBehavior 'PWM a
 pwm' = TypedBehavior
 
