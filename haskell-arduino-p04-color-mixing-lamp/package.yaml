@@ -1,0 +1,52 @@
+name:                haskell-arduino-p04-color-mixing-lamp
+version:             0.1.0.0
+github:              "githubuser/haskell-arduino-p04-color-mixing-lamp"
+license:             BSD3
+author:              "Author name here"
+maintainer:          "example@example.com"
+copyright:           "2020 Author name here"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/githubuser/haskell-arduino-p04-color-mixing-lamp#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- arduino-copilot
+- mtl
+
+library:
+  source-dirs: src
+  default-extensions:
+  - RebindableSyntax
+
+executables:
+  haskell-arduino-p04-color-mixing-lamp-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - haskell-arduino-p04-color-mixing-lamp
+
+tests:
+  haskell-arduino-p04-color-mixing-lamp-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - haskell-arduino-p04-color-mixing-lamp
