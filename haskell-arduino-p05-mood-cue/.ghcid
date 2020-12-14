@@ -1,1 +1,1 @@
--c "stack ghci haskell-arduino-p04-color-mixing-lamp:lib"
+-c "stack ghci haskell-arduino-p05-mood-cue:lib"

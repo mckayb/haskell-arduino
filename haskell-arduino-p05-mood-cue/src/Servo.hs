@@ -1,4 +1,65 @@
+{-# LANGUAGE DataKinds #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE UndecidableInstances #-}
+
 module Servo where
+
+import Data.Function (const)
+import Control.Monad.Writer (MonadWriter(tell))
+import Copilot.Arduino.Internals
+import Copilot.Arduino.Uno
+
+data Servo a = Servo { minPulseWidth :: Int, maxPulseWidth :: Int, pin :: a }
+
+defaultPulseWidth :: Integer
+defaultPulseWidth = 1500
+
+servo :: IsPWMPin p => Pin p -> Servo (Pin p)
+servo = Servo minPulseWidth maxPulseWidth
+  where
+    minPulseWidth = 544
+    maxPulseWidth = 2400
+
+{-
+transform' :: Fractional a => a -> a -> a -> a -> a -> a
+transform' lmin lmax rmin rmax value = 
+  (((value - lmin) * (rmax - rmin)) / (lmax - lmin)) + rmin
+
+transform :: Fractional a => a -> a
+transform = transform' 0 1023 0 179
+-}
+
+setAngle :: IsPWMPin p => Servo (Pin p) -> Int -> Sketch ()
+setAngle (Servo minPulse maxPulse pin) angle = do
+  let floatMin = fromIntegral minPulse
+  let floatMax = fromIntegral maxPulse
+  let floatAngle = fromIntegral angle
+
+  let duration = floatMin + (((floatMax - floatMin) * floatAngle) / 180) :: Float
+  pin =: pwm' (constF duration)
+
+
+-- The library only defines pwm for Word8, so we did some hacking here to allow floats.
+pwm' :: Behavior a -> TypedBehavior 'PWM a
+pwm' = TypedBehavior
+
+instance (Typed a, IsPWMPin t) => Output (Pin t) (Event 'PWM (Stream a)) where
+    (Pin (PinId n)) =: (Event v c) = do
+        (f, triggername) <- defineTriggerAlias' ("pin_" <> show n) "analogWrite" mempty
+        tell [(go triggername, const f)]
+      where
+        go triggername tl =
+            let c' = addTriggerLimit tl c
+            in trigger triggername c' [arg (constant n), arg v]
+
+
+
+
+
+{-
+150 / 250 ->        
+-}
 
 {-
 Servo's move by Pulse Width Modulation, or PWM.
