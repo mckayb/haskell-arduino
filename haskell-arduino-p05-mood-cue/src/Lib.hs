@@ -2,22 +2,24 @@ module Lib
     ( someFunc
     ) where
 
-import Copilot.Arduino
 import Copilot.Arduino.Uno
+import Servo
 import qualified Copilot.Arduino.Library.Serial as Serial
-import qualified Servo
 
+someFunc :: IO ()
 someFunc = arduino $ do
-    redSensorVal <- input a0 :: Sketch (Behavior ADC)
+    potVal <- unsafeCast <$> (input a0 :: Sketch (Behavior ADC)) :: Sketch (Behavior Float)
 
     Serial.baud 9600
-    Serial.device =: [ Serial.str "Raw Sensor Values: \t Red: "
-                     , Serial.show redSensorVal
+    Serial.device =: [ Serial.str "potVal: "
+                     , Serial.show potVal
+                     ]
+    let angle = Servo.transform potVal
+    Serial.device =: [ Serial.str "angle: "
+                     , Serial.show angle
                      , Serial.char '\n'
                      ]
 
-    let servo = Servo.servo pin9
-
-    led =: blinking
-    delay =: MilliSeconds (constant 100)
-
+    pin9 =: pwm' angle
+    delay =: MilliSeconds (constant 15)
+    
