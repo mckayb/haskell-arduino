@@ -1,0 +1,1 @@
+-c "stack ghci haskell-arduino-p05-mood-cue:lib"
